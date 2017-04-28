@@ -1,0 +1,19 @@
+{
+  "name": "mariokart",
+  "version": "1.0.0",
+  "description": "Le jeu mario kart",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Ilygos/MarioKartNodeJS.git"
+  },
+  "author": "Maxence Beaumont",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ilygos/MarioKartNodeJS/issues"
+  },
+  "homepage": "https://github.com/Ilygos/MarioKartNodeJS#readme"
+}
