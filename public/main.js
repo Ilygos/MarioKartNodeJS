@@ -6,7 +6,7 @@ const SPEED = 500;
 
 var sfx = new Audio('LEEROY JENKINS!!! .mp3');
 var theme = new Audio('Tuvan Throat Singing.mp3');
-//theme.play();
+theme.play();
 
 var socket = io();
 var canvas=document.getElementById("stage");
@@ -27,7 +27,6 @@ var acceleration = {'x': 0, 'y': 0};
 
 // set canvas to be a tab stop (necessary to give it focus)
 canvas.setAttribute('tabindex','0');
-colors.setAttribute('tabindex', '1');
 
 // set focus to the canvas
 canvas.focus();
