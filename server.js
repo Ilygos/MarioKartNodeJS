@@ -15,6 +15,10 @@ IO.on('connection', function(pSocket)
   {
     console.log('A user has left the server');
   });
+  pSocket.on('send', function(send)
+  {
+    pSocket.broadcast.emit('recieved', send);
+  })
 });
 
 APP.use(EXPRESS.static('./public'));

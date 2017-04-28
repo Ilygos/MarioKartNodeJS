@@ -1,12 +1,19 @@
 //Main.js : Mario Kart
-var canvas = document.getElementById('stage');
-var charactersZone = document.getElementById('Characters');
-var context = canvas.getContext('2d');
-document.addEventListener("keydown",move,false);
-
-var id = setInterval(gameLoop);
+const MAX_SPEEDX = 1;
+const MAX_SPEEDY = 1;
+const KART_SIZE = 50;
+var socket = io();
+var canvas=document.getElementById("stage");
+var ctx=canvas.getContext("2d");
+var colors = document.getElementsByClassName('color');
 var cw=canvas.width;
 var ch=canvas.height;
+var id = setInterval(gameLoop);
+
+var easterEgg = "none";
+
+var velocity = {'x': 0, 'y': 0};
+var acceleration = {'x': 0, 'y': 0};
 
 // set canvas to be a tab stop (necessary to give it focus)
 canvas.setAttribute('tabindex','0');
@@ -14,38 +21,86 @@ canvas.setAttribute('tabindex','0');
 // set focus to the canvas
 canvas.focus();
 
-// create an x & y indicating where to draw the rect
+// parameters
 var x=150;
 var y=150;
+var color = 'magenta';
+var player2X;
+var player2Y;
+var player2Color;
 
 // draw the rect for the first time
 draw();
 
 // listen for keydown events on the document
 // the canvas does not trigger key events
-document.addEventListener("keydown",handleKeydown,false);
+document.addEventListener("keydown",handleKeydown);
+document.addEventListener("keyup",handleKeyup);
 
+for(var i = 0; i < colors.length; i++) colors[i].addEventListener('click', changeColor);
+
+socket.on('recieved', function(recieved)
+{
+  player2X = recieved.x;
+  player2Y = recieved.y;
+  player2Color = recieved.color;
+});
+
+function gameLoop()
+{
+  if (easterEgg == "Fabien est trop handsome !") color = 'pink';
+  x += acceleration.x;
+  y += acceleration.y;
+  if (x < 0) x = 0;
+  else if (x + 20 > cw) x = cw - 20;
+  if (y < 0) y = 0;
+  else if (y + 20> ch) y = ch - 20;
+  socket.emit("send", {'x': x, 'y': y, 'color': color});
+
+  draw();
+}
 // handle key events
 function handleKeydown(e){
 
-  // if the canvas isn't focused,
-  // let some other element handle this key event
-  if(e.target.id!=='canvas'){return;}
-
-  // change x,y based on which key was down
   switch(e.keyCode){
-    case 87: x+=20; break;  // W
-    case 65: x-=20; break;  // A
-    case 83: y+=20; break;  // S
-    case 68: y-=20; break;  // D
+    case 68: velocity.x = 20; break;  // D
+    case 81: velocity.x = -20; break;  // Q
+    case 83: velocity.y = 20; break;  // S
+    case 90: velocity.y = -20; break;  // Z
   }
-
-  // redraw the canvas
-  draw();
+  acceleration.x = Math.max(-MAX_SPEEDX, Math.min(MAX_SPEEDX, acceleration.x + velocity.x*1/100));
+  acceleration.y = Math.max(-MAX_SPEEDY, Math.min(MAX_SPEEDY, acceleration.y + velocity.y*1/100));
 }
 
-// clear the canvas and redraw the rect in its new x,y position
+function handleKeyup(e) {
+  if (e.keyCode == 68 || e.keyCode == 81)
+  {
+    acceleration.x = 0;
+    velocity.x = 0;
+  }
+
+  if (e.keyCode == 83 || e.keyCode == 90)
+  {
+     velocity.y = 0;
+     acceleration.y = 0;
+  }
+}
+
+function changeColor(pEvent)
+{
+  var name = pEvent.target.className.split(" ");
+  color = name[name.length - 1];
+}
+
+function drawRect(px, py, pwidth, pheight, pcolor)
+{
+  ctx.fillStyle=pcolor;
+  ctx.fillRect(px,py, pwidth, pheight);
+}
+
 function draw(){
   ctx.clearRect(0,0,cw,ch);
-  ctx.fillRect(x,y,20,20);
+  drawRect(x, y, KART_SIZE, KART_SIZE, color);
+  drawRect(player2X, player2Y, KART_SIZE, KART_SIZE, player2Color);
+
 }
