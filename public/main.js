@@ -33,8 +33,8 @@ canvas.focus();
 // parameters
 //Player1
 var life = 3;
-var x=150;
-var y=150;
+var x=Math.floor(Math.random()*(cw+1));
+var y=Math.floor(Math.random()*(ch+1));
 var color = 'magenta';
 //player2X
 var player2Life = 3;
@@ -65,6 +65,7 @@ function gameLoop()
   tick();
   if (easterEgg == "Fabien est trop handsome !") color = 'pink';
   move();
+  collision();
   if (x < 0) x = 0;
   else if (x + KART_SIZE > cw) x = cw - KART_SIZE;
   if (y < 0) y = 0;
@@ -85,6 +86,20 @@ function move () {
 
     acceleration.x = newAccel.x;
     acceleration.y = newAccel.y;
+}
+
+function win()
+{
+
+}
+
+function collision() {
+  if (x + KART_SIZE > player2X && x < player2X + KART_SIZE && y < player2Y + KART_SIZE && y > player2Y)
+  {
+    if(player2Life > 0) player2Life--;
+    else win()
+
+  }
 }
 
 
@@ -126,13 +141,22 @@ function drawRect(px, py, pwidth, pheight, pcolor)
   ctx.fillStyle=pcolor;
   ctx.fillRect(px,py, pwidth, pheight);
 }
+function renderHeart()
+{
+  for (var i = 0; i < lifep1.length; i++)
+    lifep1[i].style.display = "none";
+  for (i = 0; i < lifep2.length; i++)
+    lifep2[i].style.display = "none";
+  for (i = 0; i < life; i++)
+    lifep1[i].style.display = "inline-block";
+  for (i = 0; i < player2Life; i++)
+    lifep2[i].style.display = "inline-block";
+}
 
 function draw(){
-  for (var i = 0; i < life; i++)
-    lifep1[i].style.display = "inline-block";
-  for (var i = 0; i < player2Life; i++)
-    lifep2[i].style.display = "inline-block";
+
   ctx.clearRect(0,0,cw,ch);
+  renderHeart();
   drawRect(x, y, KART_SIZE, KART_SIZE, color);
   drawRect(player2X, player2Y, KART_SIZE, KART_SIZE, player2Color);
 

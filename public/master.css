@@ -36,6 +36,14 @@ html, body {
   display: none;
 }
 
+#id {
+  position: absolute;
+  font-size: 78px;
+  top: 50%;
+  left: 50%;
+  color: #00AAFF
+}
+
 #stage {
   -moz-border-radius:10px;
   -webkit-border-radius:10px;
