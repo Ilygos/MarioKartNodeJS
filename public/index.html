@@ -8,7 +8,6 @@
   </head>
   <body>
     <div id="Characters">
-      <h2>Characters:</h2>
       <div class="color black"></div>
       <div class="color red"></div>
       <div class="color green"></div>
@@ -16,18 +15,26 @@
       <div class="color yellow"></div>
     </div>
     <div id="hud">
-      <h2>Player1</h2><br><br>
-      <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
-      <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
-      <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
-      <h2>Player2</h2><br><br>
-      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
-      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
-      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
-    </div>
+        <div id="player1">
+            <h2>Player1</h2>
+                <div id="lifeBarPlayer1">
+                  <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
+                  <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
+                  <img class="lifep1" src="heart.png" width="50px" height="50px"></img>
+                </div>
+        </div>
+        <div id="player2"> 
+              <h2>Player2</h2>
+                <div id="lifeBarPlayer2">
+                      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
+                      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
+                      <img class="lifep2" src="heart.png" width="50px" height="50px"></img>
+                </div>
+        </div>
     <div id="win">
       WIN
     </div>
+</div>
     <canvas id="stage" width="750" height="750"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src='main.js'></script>
