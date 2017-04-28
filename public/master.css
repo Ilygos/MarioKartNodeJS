@@ -24,6 +24,12 @@ html, body {
   top: 0;
 }
 
+#Characters
+{
+  color: aquamarine;
+  
+}
+
 .colors {
   position: fixed;
 }

@@ -1,13 +1,16 @@
 //Main.js : Mario Kart
-const MAX_SPEEDX = 1;
-const MAX_SPEEDY = 1;
+const MAX_SPEEDX = 300;
+const MAX_SPEEDY = 300;
 const KART_SIZE = 50;
+const SPEED = 500;
+
 var socket = io();
 var canvas=document.getElementById("stage");
 var ctx=canvas.getContext("2d");
 var colors = document.getElementsByClassName('color');
 var cw=canvas.width;
 var ch=canvas.height;
+var deltaTime;
 var id = setInterval(gameLoop);
 
 var easterEgg = "none";
@@ -22,9 +25,13 @@ canvas.setAttribute('tabindex','0');
 canvas.focus();
 
 // parameters
+//Player1
+var life;
 var x=150;
 var y=150;
 var color = 'magenta';
+//player2X
+var player2Life = 3;
 var player2X;
 var player2Y;
 var player2Color;
@@ -44,32 +51,48 @@ socket.on('recieved', function(recieved)
   player2X = recieved.x;
   player2Y = recieved.y;
   player2Color = recieved.color;
+  life = recieved.life;
 });
 
 function gameLoop()
 {
+  tick();
   if (easterEgg == "Fabien est trop handsome !") color = 'pink';
-  x += acceleration.x;
-  y += acceleration.y;
+  move();
   if (x < 0) x = 0;
-  else if (x + 20 > cw) x = cw - 20;
+  else if (x + KART_SIZE > cw) x = cw - KART_SIZE;
   if (y < 0) y = 0;
-  else if (y + 20> ch) y = ch - 20;
-  socket.emit("send", {'x': x, 'y': y, 'color': color});
+  else if (y + KART_SIZE> ch) y = ch - KART_SIZE;
+  socket.emit("send", {'x': x, 'y': y, 'color': color, 'life': player2Life});
 
   draw();
 }
+
+function move () {
+    var newAccel = {
+      'x': acceleration.x += velocity.x * deltaTime,
+      'y': acceleration.y += velocity.y * deltaTime
+    }
+
+    x += deltaTime * (acceleration.x + newAccel.x) / 2 ;
+    y += deltaTime * (acceleration.y + newAccel.y) / 2 ;
+
+    acceleration.x = newAccel.x;
+    acceleration.y = newAccel.y;
+}
+
+
 // handle key events
 function handleKeydown(e){
 
   switch(e.keyCode){
-    case 68: velocity.x = 20; break;  // D
-    case 81: velocity.x = -20; break;  // Q
-    case 83: velocity.y = 20; break;  // S
-    case 90: velocity.y = -20; break;  // Z
+    case 68: velocity.x = SPEED; break;  // D
+    case 81: velocity.x = -SPEED; break;  // Q
+    case 83: velocity.y = SPEED; break;  // S
+    case 90: velocity.y = -SPEED; break;  // Z
   }
-  acceleration.x = Math.max(-MAX_SPEEDX, Math.min(MAX_SPEEDX, acceleration.x + velocity.x*1/100));
-  acceleration.y = Math.max(-MAX_SPEEDY, Math.min(MAX_SPEEDY, acceleration.y + velocity.y*1/100));
+  acceleration.x = Math.max(-MAX_SPEEDX, Math.min(MAX_SPEEDX, acceleration.x + velocity.x*1/deltaTime));
+  acceleration.y = Math.max(-MAX_SPEEDY, Math.min(MAX_SPEEDY, acceleration.y + velocity.y*1/deltaTime));
 }
 
 function handleKeyup(e) {
@@ -103,4 +126,13 @@ function draw(){
   drawRect(x, y, KART_SIZE, KART_SIZE, color);
   drawRect(player2X, player2Y, KART_SIZE, KART_SIZE, player2Color);
 
+}
+
+//DeltaTime
+var lastUpdate = Date.now();
+
+function tick() {
+    var now = Date.now();
+    deltaTime = (now - lastUpdate)/1000;
+    lastUpdate = now;
 }
