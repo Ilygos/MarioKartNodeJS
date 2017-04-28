@@ -4,10 +4,16 @@ const MAX_SPEEDY = 300;
 const KART_SIZE = 50;
 const SPEED = 500;
 
+
+var audio = new Audio('Tuvan Throat Singing.mp3');
+//audio.play();
+
 var socket = io();
 var canvas=document.getElementById("stage");
 var ctx=canvas.getContext("2d");
 var colors = document.getElementsByClassName('color');
+var lifep1 = document.getElementsByClassName('lifep1');
+var lifep2 = document.getElementsByClassName('lifep2');
 var cw=canvas.width;
 var ch=canvas.height;
 var deltaTime;
@@ -26,7 +32,7 @@ canvas.focus();
 
 // parameters
 //Player1
-var life;
+var life = 3;
 var x=150;
 var y=150;
 var color = 'magenta';
@@ -122,6 +128,10 @@ function drawRect(px, py, pwidth, pheight, pcolor)
 }
 
 function draw(){
+  for (var i = 0; i < life; i++)
+    lifep1[i].style.display = "inline-block";
+  for (var i = 0; i < player2Life; i++)
+    lifep2[i].style.display = "inline-block";
   ctx.clearRect(0,0,cw,ch);
   drawRect(x, y, KART_SIZE, KART_SIZE, color);
   drawRect(player2X, player2Y, KART_SIZE, KART_SIZE, player2Color);

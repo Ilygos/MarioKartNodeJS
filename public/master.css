@@ -14,7 +14,10 @@ html, body {
  */
 
 #hud{
-  background-color: #FF0000;
+  background: url("hud_bg.png") no-repeat;
+  background-size: cover;
+  display: inline-block;
+  color:#00aaFF;
   width: 50%;
   height: 500px;
   position: absolute;
@@ -23,6 +26,14 @@ html, body {
   -webkit-border-radius:10px;
   border-radius:10px;
   border: 10px groove #666666;
+}
+
+#hud .lifep1{
+  display: none;
+}
+
+#hud .lifep2{
+  display: none;
 }
 
 #stage {
