@@ -27,6 +27,7 @@ var acceleration = {'x': 0, 'y': 0};
 
 // set canvas to be a tab stop (necessary to give it focus)
 canvas.setAttribute('tabindex','0');
+colors.setAttribute('tabindex', '1');
 
 // set focus to the canvas
 canvas.focus();
