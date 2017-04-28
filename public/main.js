@@ -1,12 +1,12 @@
 //Main.js : Mario Kart
-const MAX_SPEEDX = 300;
-const MAX_SPEEDY = 300;
+const MAX_SPEEDX = 400;
+const MAX_SPEEDY = 400;
 const KART_SIZE = 50;
 const SPEED = 500;
 
 
 var audio = new Audio('Tuvan Throat Singing.mp3');
-//audio.play();
+audio.play();
 
 var socket = io();
 var canvas=document.getElementById("stage");
@@ -97,8 +97,8 @@ function handleKeydown(e){
     case 83: velocity.y = SPEED; break;  // S
     case 90: velocity.y = -SPEED; break;  // Z
   }
-  acceleration.x = Math.max(-MAX_SPEEDX, Math.min(MAX_SPEEDX, acceleration.x + velocity.x*1/deltaTime));
-  acceleration.y = Math.max(-MAX_SPEEDY, Math.min(MAX_SPEEDY, acceleration.y + velocity.y*1/deltaTime));
+  acceleration.x = Math.max(-MAX_SPEEDX, Math.min(MAX_SPEEDX, acceleration.x + velocity.x*deltaTime));
+  acceleration.y = Math.max(-MAX_SPEEDY, Math.min(MAX_SPEEDY, acceleration.y + velocity.y*deltaTime));
 }
 
 function handleKeyup(e) {
