@@ -4,9 +4,9 @@ const MAX_SPEEDY = 400;
 const KART_SIZE = 50;
 const SPEED = 500;
 
-
-var audio = new Audio('Tuvan Throat Singing.mp3');
-audio.play();
+var sfx = new Audio('LEEROY JENKINS!!! .mp3');
+var theme = new Audio('Tuvan Throat Singing.mp3');
+//theme.play();
 
 var socket = io();
 var canvas=document.getElementById("stage");
@@ -18,6 +18,7 @@ var cw=canvas.width;
 var ch=canvas.height;
 var deltaTime;
 var id = setInterval(gameLoop);
+var id2 = setInterval(damagingDelay, 3000);
 
 var easterEgg = "none";
 
@@ -41,6 +42,7 @@ var player2Life = 3;
 var player2X;
 var player2Y;
 var player2Color;
+var canBeDamaged = false;
 
 // draw the rect for the first time
 draw();
@@ -62,6 +64,8 @@ socket.on('recieved', function(recieved)
 
 function gameLoop()
 {
+  if(life <= 0 ) win("player2");
+  else if (player2Life <= 0) win("player1");
   tick();
   if (easterEgg == "Fabien est trop handsome !") color = 'pink';
   move();
@@ -88,20 +92,29 @@ function move () {
     acceleration.y = newAccel.y;
 }
 
-function win()
+function win(winner)
 {
-
+  document.removeEventListener("keydown", handleKeydown);
+  document.removeEventListener("keyUp", handleKeyup);
+  clearInterval(id);
+  clearInterval(id2);
+  console.log("Win"+winner);
 }
 
 function collision() {
-  if (x + KART_SIZE > player2X && x < player2X + KART_SIZE && y < player2Y + KART_SIZE && y > player2Y)
+  if (x + KART_SIZE > player2X && x < player2X + KART_SIZE && y < player2Y + KART_SIZE && y > player2Y && canBeDamaged)
   {
+    sfx.play();
+    canBeDamaged = false;
     if(player2Life > 0) player2Life--;
-    else win()
-
+    else win();
   }
 }
 
+function damagingDelay()
+{
+  canBeDamaged  = true;
+}
 
 // handle key events
 function handleKeydown(e){
